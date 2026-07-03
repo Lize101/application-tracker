@@ -4,7 +4,15 @@ import DeleteButton from '@/components/DeleteButton';
 
 export default async function Home() {
 
-const { data } = await supabaseConnection.from('applications').select('*').order('created_at', {ascending: false});
+const { data, error } = await supabaseConnection.from('applications').select('*').order('created_at', {ascending: false});
+
+if(error) {
+  return (
+    <div>
+      <p>There has been an error returning your data.</p>
+    </div>
+  )
+}
 
   return (
     <main>
