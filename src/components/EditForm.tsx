@@ -1,4 +1,4 @@
-'use client' //Client component
+'use client'
 
 import { useForm } from "react-hook-form";
 import supabaseConnection from "@/lib/supabase";
@@ -19,9 +19,20 @@ const applicationSchema = z.object({
 
 type ApplicationForm = z.infer<typeof applicationSchema>
 
-export default function ApplicationPage(){
+export default function EditForm( {application} ) {
 
-    const {register, handleSubmit, reset, formState: {errors}} = useForm<ApplicationForm>({resolver: zodResolver(applicationSchema)});
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<ApplicationForm>({resolver: zodResolver(applicationSchema),
+    defaultValues: {
+        job_title: application.job_title,
+        company: application.company,
+        salary: application.salary || '',
+        status: application.status,
+        date_applied: application.date_applied || '',
+        notes: application.notes || '',
+        feedback: application.feedback || '',
+        job_url: application.job_url || ''
+    }
+    });
     
     const router = useRouter();
 
@@ -34,18 +45,17 @@ export default function ApplicationPage(){
                 feedback: data.feedback || null,
                 job_url: data.job_url || null
             }
-            await supabaseConnection.from('applications').insert(cleanedData)
+            await supabaseConnection.from('applications').update(cleanedData).eq('id', application.id)
             reset()
             router.push('/')
         } catch (err) {
             console.error('There is an error:', err)
         }
     }
-
-    return(
-        <>
-            <h1>Applications</h1>
-
+    
+    return (
+        <div>
+            <h1>Edit Form</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="job_title">Job Title *</label>
                 <input {...register('job_title')} id="job_title" type="text"/>
@@ -80,8 +90,9 @@ export default function ApplicationPage(){
                 <label htmlFor="job_url">Job URL</label>
                 <input {...register('job_url')} id="job_url" type="url"/>
 
-                <button type="submit">Add to job tracker</button>
+                <button type="submit">Update job tracker</button>
             </form>
-        </>
+
+        </div>
     )
 }
