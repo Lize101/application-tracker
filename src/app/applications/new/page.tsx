@@ -5,6 +5,7 @@ import supabaseConnection from "@/lib/supabase";
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 const applicationSchema = z.object({
     job_title: z.string().min(1, 'Job title is required here'),
@@ -44,9 +45,12 @@ export default function ApplicationPage(){
 
     return(
         <>
-            <h1>Applications</h1>
+            <div className="flex justify-end">
+                <Link href="/" className="text-right mb-10 text-lg mr-4 sm:mr-10 mt-10 hover:text-blue-600">← Back to Job Listing</Link>
+            </div>
+            <h1 className="text-3xl font-bold my-14 text-center">New Job Application</h1>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} className="bg-zinc-200 grid m-auto p-10 rounded sm:w-full md:max-w-xl mb-20">
                 <label htmlFor="job_title">Job Title *</label>
                 <input {...register('job_title')} id="job_title" type="text"/>
                 {errors.job_title && <p>{errors.job_title.message as string}</p>}
@@ -80,7 +84,7 @@ export default function ApplicationPage(){
                 <label htmlFor="job_url">Job URL</label>
                 <input {...register('job_url')} id="job_url" type="url"/>
 
-                <button type="submit">Add to job tracker</button>
+                <button type="submit" className='bg-blue-500 hover:bg-blue-700 py-3 text-white text-lg rounded mt-4 w-xs mx-auto'>Add to job tracker</button>
             </form>
         </>
     )
