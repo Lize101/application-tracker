@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
+import type { Application } from "@/types";
 
 const applicationSchema = z.object({
     job_title: z.string().min(1, 'Job title is required here'),
@@ -20,7 +21,7 @@ const applicationSchema = z.object({
 
 type ApplicationForm = z.infer<typeof applicationSchema>
 
-export default function EditForm( {application} ) {
+export default function EditForm( {application}: {application: Application} ) {
 
     const {register, handleSubmit, reset, formState: {errors}} = useForm<ApplicationForm>({resolver: zodResolver(applicationSchema),
     defaultValues: {
