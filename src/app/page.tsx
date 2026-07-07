@@ -2,6 +2,8 @@ import supabaseConnection from '@/lib/supabase';
 import Link from 'next/link';
 import DeleteButton from '@/components/DeleteButton';
 
+export const revalidate = 0;
+
 export default async function Home() {
 
 const { data, error } = await supabaseConnection.from('applications').select('*').order('created_at', {ascending: false});
