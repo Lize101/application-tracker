@@ -37,6 +37,7 @@ export default function ApplicationPage(){
             }
             await supabaseConnection.from('applications').insert(cleanedData)
             reset()
+            router.refresh()
             router.push('/')
         } catch (err) {
             console.error('There is an error:', err)
